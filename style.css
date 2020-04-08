@@ -5,4 +5,11 @@
     background: url('./tex/bg2.png');
     background-size: 100% 100%;
     image-rendering: pixelated;
+<<<<<<< Updated upstream
 }
+=======
+}
+.col-12{
+    font-family:serif;
+}
+>>>>>>> Stashed changes

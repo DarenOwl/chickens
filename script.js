@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", Init);
 
 var canvas;
 var context;
+<<<<<<< Updated upstream
 var scaleItem = 32;
 
 var sources = 
@@ -26,6 +27,14 @@ var sources =
     witch1:   './tex/witch_1.png', 
     numbers:  './tex/numbers.png',
     potions:  './tex/potions.png',
+=======
+var squares;
+
+var sources =
+  {
+    hen:      './tex/hen.png',
+    cock:      './tex/cock.png'
+>>>>>>> Stashed changes
   };
 
 var images = {};
@@ -35,6 +44,7 @@ function Init() {
 	  canvas = document.getElementById('myCanvas');
     context = canvas.getContext("2d");
 
+<<<<<<< Updated upstream
     //размер canvas
     var size = scaleItem * 6;
     var pxScale = canvas.offsetWidth / size;
@@ -61,12 +71,18 @@ function Init() {
       ClickAt(getMousePos(canvas, e).x, getMousePos(canvas, e).y, pxScale);
     };
     
+=======
+    //squares
+    squares = new Squares(canvas,8,256);
+
+>>>>>>> Stashed changes
     //картинки
     for(var name in sources)
     {
       images[name] = new Image();
       images[name].src = sources[name];
     }
+<<<<<<< Updated upstream
 }
 
 function ClickAt(x,y, scale)
@@ -243,10 +259,39 @@ function AnimateWitch(){
     witchFrame++;
 }
 
+=======
+
+    squares.setOnClick(function clickAt(x,y) {
+        console.log("click from script.js");
+        if (x == hen.x && y == hen.y){
+            chosen = hen;
+        } else if (x == cock.x && y == cock.y) {
+            chosen = cock;
+        } else if (chosen != null && Math.abs(chosen.x - x) + Math.abs(chosen.y - y) < 2){
+          chosen.x = x;
+          chosen.y = y;
+          chosen = null;
+        }
+    })
+}
+
+var hen = {
+  x: 0,
+  y: 0
+};
+
+var cock = {
+  x: 3,
+  y: 2
+};
+
+var chosen = hen;
+>>>>>>> Stashed changes
 
 document.addEventListener("DOMContentLoaded", function ()
 {
 
+<<<<<<< Updated upstream
     cauldronX = context.canvas.width/2 - scaleItem;
     cauldronY = context.canvas.height/2;
 
@@ -270,11 +315,30 @@ document.addEventListener("DOMContentLoaded", function ()
 
         DrawScore();
 
+=======
+    setInterval(function()
+    {
+        squares.clearCanvas();
+        if (chosen != null){
+            squares.underlineSquare(chosen.x, chosen.y);
+            squares.underlineSquare(chosen.x - 1, chosen.y, 'yellow');
+            squares.underlineSquare(chosen.x + 1, chosen.y, 'yellow');
+            squares.underlineSquare(chosen.x, chosen.y - 1, 'yellow');
+            squares.underlineSquare(chosen.x, chosen.y + 1, 'yellow');
+            squares.underlineMouseSquare();
+        }
+        squares.drawImage(images.hen, hen.x, hen.y);
+        squares.drawImage(images.cock, cock.x, cock.y - 0.5, 1, 1.5);
+>>>>>>> Stashed changes
     }, 100);
 });
 
 
+<<<<<<< Updated upstream
 //SOME HELP MATHS FUNCTIONS
+=======
+//SOME HELP FUNCTIONS
+>>>>>>> Stashed changes
 
 //случайное число от 0 до max
 function getRandomInt(max)
@@ -289,4 +353,8 @@ function getDirection(startX, startY, destX, destY)
     x: (destX - startX) / 10,
     y: (destY - startY) / 10
   };
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
