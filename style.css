@@ -3,7 +3,6 @@
     width: 560px;
     height: 560px;
     background-size: 100% 100%;
-    image-rendering: pixelated;
 }
 .col-12{
     font-family:serif;

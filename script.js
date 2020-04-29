@@ -165,6 +165,21 @@ var player = {  farmers: true,  chickens: false} //игрок
 var turn = {  farmers: false,  chickens: true} //очередь
 
 function runGame(){
+    if (wife.x == cock.x && wife.y == cock.y || farmer.x == cock.x && farmer.y == cock.y){
+      cock.active = false;
+      cock.x = 5;
+      cock.y = 9;
+    }
+    if (wife.x == hen.x && wife.y == hen.y  || farmer.x == hen.x && farmer.y == hen.y){
+      hen.active = false;
+      hen.x = 4;
+      hen.y = 9;
+    }
+
+    if (hen.active == false && cock.active == false){
+      game = false;
+      resetField();
+    }
     //ходит тот, чья очередь наступила
     if (turn.chickens){
       playChickenTurn();
@@ -172,12 +187,20 @@ function runGame(){
       playFarmersTurn();
     }
 
-
     if (chosen != null){
         drawSquaresAround(chosen.x,chosen.y,'#DED274');
     }
     squares.underlineMouseSquare();
     drawCharacters();
+}
+
+function resetField(){
+  hen = {  x: 8,  y: 4, canMove: true, active: true};
+  cock = {  x: 1,  y: 4, canMove: true, active: true};
+  wife = {  x: 6,  y: 4, canMove: true, active: true};
+  farmer = {  x: 3,  y: 4, canMove: true, active: true};
+  chosen = null;
+  turn = {  farmers: false,  chickens: true}
 }
 
 //переключение очереди
@@ -191,8 +214,8 @@ function switchTurn(){
         wife.canMove = true;
     } else {
         //теперь эти персонажи могут ходить!
-        hen.canMove = true;
-        cock.canMove = true;
+        hen.canMove = hen.active;
+        cock.canMove = cock.active;
     }
     console.log('next turn: ' + ((turn.chickens) ? 'chickens' : 'farmers'));
 }
@@ -221,12 +244,12 @@ delay = 0;
 //ход программы имитирует ход игрока с задержками на "мыслительный процесс"
 function programPlays(wom,man){
     if (delay < 5){
-        drawSquaresAround(wom.x,wom.y);
+        drawSquaresAround(wom.x,wom.y,'#DED274');
     } else if (delay == 5) {
       if (wom == hen) playChicken(hen);
       else playFarmer(wom);
     } else if (delay < 10) {
-        drawSquaresAround(man.x,man.y);
+        drawSquaresAround(man.x,man.y,'#DED274');
     } else if (delay == 10) {
       if (man == cock) playChicken(cock);
       else playFarmer(man);
@@ -307,8 +330,7 @@ function move(x, y, character){
         && Math.abs(character.x - x) + Math.abs(character.y - y) < 2
         //персонаж не выйдет за пределы поля
         && x > 0 && x < 9 && y > 0 && y < 9
-        //клетка не занята никем другим персонажем
-        && isEmpty(x,y)){
+        && !inOneTeam(character, whoStayAt(x,y))){
         character.x = x;
         character.y = y;
         character.canMove = false;
@@ -322,6 +344,19 @@ function isEmpty(x,y){
           (x == cock.x && y == cock.y) ||
           (x == farmer.x && y == farmer.y) ||
           (x == wife.x && y == wife.y));
+}
+
+function whoStayAt(x,y){
+  if (x == hen.x && y == hen.y) return hen;
+  else if (x == cock.x && y == cock.y) return cock;
+  else if (x == farmer.x && y == farmer.y) return farmer;
+  else if (x == wife.x && y == wife.y) return wife;
+  else return null;
+}
+
+function inOneTeam(character1, character2){
+  return ((character1 == hen || character2 == hen) && (character1 == cock || character2 == cock))
+        || ((character1 == farmer || character2 == farmer) && (character1 == wife || character2 == wife));
 }
 
 //---------------------------Draw-----------------------------
@@ -360,7 +395,5 @@ function drawSquaresAround(x,y,color) {
 }
 
 /* TODO:
-добавить мозгов персонажам
 дабавить возможность фермерам ловить куриц
-добавить счёт
 */
