@@ -10,9 +10,10 @@ var sources =
     cock:     './tex/cock.png',
     wife:     './tex/wife.png',
     farmer:   './tex/farmer.png',
-    chickensButton:   './tex/chickensButton.png',
-    farmersButton:   './tex/farmersButton.png',
-    confirmButton:   './tex/someButton.png'
+    chickensButton:   './tex/chickens_team.png',
+    farmersButton:    './tex/farmers_team.png',
+    playButton:       './tex/play.png',
+    field:            './tex/field.png',
   };
 
 var images = {};
@@ -142,7 +143,6 @@ document.addEventListener("DOMContentLoaded", function ()
     setInterval(function()
     {
         squares.clearCanvas();
-
         //если запущена сама игра
         if (game){
             runGame();
@@ -360,14 +360,20 @@ function inOneTeam(character1, character2){
 }
 
 //---------------------------Draw-----------------------------
-
+function drawBg(){
+  //отрисовка доступных клеток вокруг выбранного персонажа
+  for (var x = 0; x < 10; x++) {
+    for (var y = 0; y < 10; y++) {
+      squares.drawImage(images.field, x, y);
+    }
+  }
+}
 //отрисовка персонажей
 function drawCharacters(){
   //отрисовка доступных клеток вокруг выбранного персонажа
   if (chosen != null){
       drawSquaresAround(chosen.x,chosen.y,'#DED274');
   }
-
   squares.drawImage(images.hen, hen.x, hen.y);
   squares.drawImage(images.cock, cock.x, cock.y - 0.5, 1, 1.5);
   squares.drawImage(images.wife, wife.x - 0.5, wife.y - 2, 2, 3);
@@ -378,8 +384,10 @@ function drawCharacters(){
 function drawUI(){
     squares.drawImage(images.chickensButton, chickensButton.x, chickensButton.y);
     squares.drawImage(images.farmersButton, farmersButton.x, farmersButton.y);
-    if (teamImage.source != null)
+    if (teamImage.source != null){
       squares.drawImage(teamImage.source, teamImage.x, teamImage.y, 2,2)
+      squares.drawImage(images.playButton, teamImage.x, teamImage.y, 2,2)
+    }
 }
 
 //отрисовка клеток вокруг заданной клетки x y
